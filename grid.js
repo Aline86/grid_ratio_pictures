@@ -13,11 +13,11 @@ class Grid {
     this.imageLoader = new ImageLoader();
     this.config = config;
     this.dom.set_css_on_grid(this.config);
-
-    this.initialize(fichiers);
+    this.fichiers = fichiers;
+    this.initialize();
   }
-  initialize(fichiers) {
-    this.pre_loading_pictures(fichiers);
+  initialize() {
+    this.pre_loading_pictures();
 
     const is_loaded = this.imageLoader.waitForAllImages(
       this.dom.getAllPictures()
@@ -31,8 +31,8 @@ class Grid {
     }
   }
   // J'injecte les image dans le DOM pour initialiser les valeurs
-  pre_loading_pictures = (fichiers) => {
-    const images_data = JSON.parse(fichiers);
+  pre_loading_pictures = () => {
+    const images_data = JSON.parse(this.fichiers);
 
     const container_width = this.dom.getContainer(this.config).clientWidth;
 
@@ -159,13 +159,13 @@ class GridRenderParts {
     return this.document.querySelectorAll(".line")[i];
   };
 
-  getAllPictures() {
+  getAllPictures = () => {
     return this.document.querySelectorAll("img");
-  }
+  };
 
-  getContainer(config) {
+  getContainer = (config) => {
     return this.document.querySelector(config.containerSelector);
-  }
+  };
 }
 
 class GridCalculateParts {
@@ -199,9 +199,7 @@ class ImageLoader {
       } else {
         img.addEventListener("load", () => resolve(img));
         img.addEventListener("error", () => {
-          console.log(
-            `L'image avec la source ${img.src} a échoué à se charger.`
-          );
+          console.log(`L'image ${img.src} n'a chargé.`);
           resolve(img);
         });
       }
