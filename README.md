@@ -1,6 +1,6 @@
 # Grille Dynamique d'Images (CSS/JS)
 
-Ce projet propose une solution sur-mesure pour créer une grille dynamique d'images en utilisant uniquement du **CSS** et du **JavaScript**. La grille ajuste automatiquement la taille des images pour remplir chaque ligne, tout en respectant leur ratio original (largeur/hauteur).
+Ce projet propose une solution pour créer une grille dynamique d'images en utilisant uniquement du **CSS** et du **JavaScript**. La grille ajuste automatiquement la taille des images pour remplir chaque ligne, tout en respectant leur ratio original (largeur/hauteur).
 
 L'approche est entièrement personnalisée et repose sur des calculs JavaScript pour positionner et redimensionner les vignettes afin d'assurer une disposition fluide et esthétique.
 
