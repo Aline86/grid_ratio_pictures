@@ -1,0 +1,24 @@
+.container {
+  width: calc(80% - 15px);
+  margin: 0 auto;
+}
+.left {
+  width: 50%;
+  height: 100%;
+}
+.right {
+  width: 50%;
+  height: 100%;
+}
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.line_2 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
