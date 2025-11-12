@@ -191,7 +191,7 @@ class GridRenderParts {
   rename_last_line = (config, last_line) => {
     if (!last_line) return;
 
-    if (last_line.getBoundingClientRect().width > 400) {
+    if (last_line.getBoundingClientRect().width > 732) {
       last_line.className = "line";
       last_line.style.gap = config.gap + "px";
       last_line.style.marginLeft = config.gap * 0.5 + "px";
