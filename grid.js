@@ -8,72 +8,85 @@ class GridConfig {
 
 class Grid {
   constructor(fichiers, config) {
+    this.hasTriggered_loader = false;
     this.dom = new GridRenderParts();
     this.calculate_grid_part = new GridCalculateParts();
     this.imageLoader = new ImageLoader();
     this.config = config;
+    this.eventManager = new EventManager();
     this.dom.set_css_on_grid(this.config);
     this.fichiers = fichiers;
+
+    this.resizeCleanup = null;
+
     this.initialize();
   }
-  initialize() {
+
+  initialize = () => {
+    if (!this.hasTriggered_loader) {
+      this.dom.create_loader(this.config);
+    }
+
     this.pre_loading_pictures();
 
     const is_loaded = this.imageLoader.waitForAllImages(
       this.dom.getAllPictures()
     );
-    if (is_loaded != undefined) {
-      is_loaded.then(() => {
-        this.dom.getContainer(this.config);
-        const fichiers_images = this.dom.getAllPictures();
-        this.calculate_grid(fichiers_images, this.config);
-      });
-    }
-  }
-  // J'injecte les image dans le DOM pour initialiser les valeurs
+
+    is_loaded.then(() => {
+      this.dom.getContainer(this.config.containerSelector);
+      const fichiers_images = this.dom.getAllPictures();
+      this.calculate_grid(fichiers_images, this.config);
+
+      if (this.resizeCleanup) {
+        this.resizeCleanup();
+      }
+
+      this.resizeCleanup = this.eventManager.recalculate_on_resize(
+        this.initialize,
+        this.dom.reinit,
+        this.config
+      );
+
+      if (!this.hasTriggered_loader) {
+        this.dom.remove_loader();
+        this.hasTriggered_loader = true;
+      }
+    });
+  };
+
   pre_loading_pictures = () => {
     const images_data = JSON.parse(this.fichiers);
-
-    const container_width = this.dom.getContainer(this.config).clientWidth;
-
-    let counter_lines = 0;
     let image_counter = 0;
-    let i = 0;
-    let line = null;
-    let img_lines = null;
+    let line = this.dom.create_line("line");
 
-    line = this.dom.create_line("line");
     while (image_counter < images_data.length) {
-      line.style.width = `${container_width}px`;
       this.dom.appendLineToContainer(line, this.config.containerSelector);
-      counter_lines++;
-      img_lines = this.dom.get_first_line(i);
-
+      let img_lines = this.dom.get_first_line(0);
       let img = this.dom.create_image(images_data, this.config, image_counter);
       this.dom.appendChildToLine(img_lines, img);
       image_counter++;
     }
   };
 
-  // Création des lignes et calcul des dimensions des images
   calculate_grid = (images) => {
-    const container = this.dom.getContainer(this.config);
+    const container = this.dom.getContainer(this.config.containerSelector);
     const container_width = container.clientWidth;
     const container_base_height = this.config.baseHeight;
     const surface_line = container_width * container_base_height;
-
-    let i = 0;
-
     const gap = this.config.gap;
     let width_under = 0;
 
     let line = this.dom.create_line("line_2");
-    document.querySelector(this.config.containerSelector).appendChild(line);
+    this.dom.appendLineToContainer(line, this.config.containerSelector);
+
     images.forEach((element) => {
       const rem = element.cloneNode();
 
       if (width_under + parseFloat(element.clientWidth, 2) >= container_width) {
-        const current_line = line;
+        if (line.children.length === 1) {
+          width_under -= gap * 0.5;
+        }
 
         const new_height = this.calculate_grid_part.calculate_rest(
           width_under,
@@ -81,26 +94,59 @@ class Grid {
           container_base_height
         );
         this.calculate_grid_part.adjust_children_height(
-          current_line,
+          line,
           element,
           new_height
         );
+
         line = this.dom.create_line("line_2");
         this.dom.appendLineToContainer(line, this.config.containerSelector);
         this.dom.appendChildToLine(line, rem);
         width_under = 0;
-
-        i++;
       } else {
         this.dom.appendChildToLine(line, rem);
-        i++;
       }
+
       width_under += parseInt(parseFloat(element.clientWidth) + gap);
       element.remove();
     });
 
     this.dom.rename_last_line(this.config, line);
-    this.dom.remove_first_container(container);
+    this.dom.remove_first_container(this.dom.get_first_line(0));
+  };
+
+  destroy = () => {
+    if (this.resizeCleanup) {
+      this.resizeCleanup();
+    }
+    this.dom.reinit(this.config);
+    this.dom = null;
+    this.calculate_grid_part = null;
+    this.imageLoader = null;
+    this.eventManager = null;
+  };
+}
+
+class EventManager {
+  constructor() {}
+
+  recalculate_on_resize = (_func, _reinit, config) => {
+    let resizeTimer;
+
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        _reinit(config);
+        _func();
+      }, 200);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearTimeout(resizeTimer);
+      window.removeEventListener("resize", handleResize);
+    };
   };
 }
 
@@ -108,46 +154,74 @@ class GridRenderParts {
   constructor() {
     this.document = document;
   }
-  set_css_on_grid(options) {
-    this.document.querySelector(
-      options.containerSelector
-    ).style.gap = `${options.gap}px`;
-    this.document.querySelector(
-      options.containerSelector
-    ).style.display = `flex`;
-    this.document.querySelector(
-      options.containerSelector
-    ).style.flexDirection = `column`;
-  }
-  create_image(images_data, config, image_counter) {
+
+  set_display_none = (line) => {
+    line.style.opacity = "0";
+  };
+
+  create_loader = (config) => {
+    const loader = this.document.createElement("div");
+    loader.className = "loader";
+    loader.innerHTML = `Chargement...`;
+    this.getContainer(config.containerSelector).appendChild(loader);
+    return loader;
+  };
+
+  remove_loader = () => {
+    this.document.querySelector(".loader")?.remove();
+  };
+
+  set_css_on_grid = (options) => {
+    const container = this.document.querySelector(options.containerSelector);
+    if (container) {
+      container.style.gap = `${options.gap}px`;
+      container.style.display = `flex`;
+      container.style.flexDirection = `column`;
+    }
+  };
+
+  create_image = (images_data, config, image_counter) => {
     let img = this.document.createElement("img");
     img.src = "images/" + images_data[image_counter];
     img.style.height = `${config.baseHeight}px`;
     img.style.objectFit = "contain";
-
     return img;
-  }
-  rename_last_line(config, last_line) {
+  };
+
+  rename_last_line = (config, last_line) => {
+    if (!last_line) return;
+
     if (last_line.getBoundingClientRect().width > 400) {
       last_line.className = "line";
       last_line.style.gap = config.gap + "px";
       last_line.style.marginLeft = config.gap * 0.5 + "px";
     } else {
-      last_line.querySelector("img").style.width = "calc(100% - 10px)";
-      last_line.querySelector("img").style.height = "auto";
+      const img = last_line.querySelector("img");
+      if (img) {
+        img.style.width = "calc(100% - " + config.gap + "px)";
+        img.style.height = "auto";
+      }
     }
-  }
+  };
 
-  remove_first_container(line) {
-    line.firstElementChild.remove();
-  }
+  remove_first_container = (line) => {
+    if (line) {
+      line.remove();
+    }
+  };
 
-  appendLineToContainer(line, selector) {
-    this.document.querySelector(selector).appendChild(line);
-  }
-  appendChildToLine(line, rem) {
-    line.appendChild(rem);
-  }
+  appendLineToContainer = (line, selector) => {
+    const container = this.document.querySelector(selector);
+    if (container) {
+      container.appendChild(line);
+    }
+  };
+
+  appendChildToLine = (line, rem) => {
+    if (line && rem) {
+      line.appendChild(rem);
+    }
+  };
 
   create_line = (className) => {
     const line = this.document.createElement("div");
@@ -163,20 +237,35 @@ class GridRenderParts {
     return this.document.querySelectorAll("img");
   };
 
-  getContainer = (config) => {
-    return this.document.querySelector(config.containerSelector);
+  getContainer = (containerSelector) => {
+    return this.document.querySelector(containerSelector);
+  };
+
+  reinit = (config) => {
+    const container = this.document.querySelector(config.containerSelector);
+    if (container) {
+      const images = container.querySelectorAll("img");
+      images.forEach((img) => {
+        img.onload = null;
+        img.onerror = null;
+      });
+      container.innerHTML = "";
+    }
   };
 }
 
 class GridCalculateParts {
   constructor() {}
-  // Fonction qui calcule la heuteur des images de la lignes pour que la surface de ttes les images remplisse la ligne
+
   calculate_rest(line_width, surface_line, container_base_height) {
     const height = surface_line / line_width - container_base_height;
 
-    return parseFloat(height.toFixed(2));
+    return height;
   }
+
   adjust_children_height(current_line, element, new_height) {
+    if (!current_line || !element) return;
+
     for (let index = 0; index < current_line.children.length; index++) {
       const child = current_line.children[index];
       const newHeight = element.getBoundingClientRect().height + new_height;
@@ -187,6 +276,7 @@ class GridCalculateParts {
 
 class ImageLoader {
   constructor() {}
+
   async waitForAllImages(images) {
     const promises = Array.from(images).map((img) => this.waitForImage(img));
     return Promise.all(promises);
@@ -197,11 +287,24 @@ class ImageLoader {
       if (img.complete) {
         resolve(img);
       } else {
-        img.addEventListener("load", () => resolve(img));
-        img.addEventListener("error", () => {
-          console.log(`L'image ${img.src} n'a chargé.`);
+        const loadHandler = () => {
+          cleanup();
           resolve(img);
-        });
+        };
+
+        const errorHandler = () => {
+          console.log(`L'image ${img.src} n'a pas chargé.`);
+          cleanup();
+          resolve(img);
+        };
+
+        const cleanup = () => {
+          img.removeEventListener("load", loadHandler);
+          img.removeEventListener("error", errorHandler);
+        };
+
+        img.addEventListener("load", loadHandler);
+        img.addEventListener("error", errorHandler);
       }
     });
   }

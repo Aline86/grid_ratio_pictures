@@ -1,5 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+}
 .container {
-  width: calc(80% - 15px);
+  width: 80%;
   margin: 0 auto;
 }
 .left {
@@ -13,12 +17,32 @@
 .line {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
 }
 
 .line_2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  width: 100%;
+}
+
+img {
+  transition: all 0.9s ease;
+  object-fit: contain;
+}
+
+.loader {
+  position: absolute;
+  width: fit-content;
+  width: calc(80% - 15px);
+  height: 100vh;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  padding: 20px;
+  background-color: white;
+  z-index: 9999;
 }

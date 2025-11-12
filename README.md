@@ -29,7 +29,7 @@ Le JavaScript est utilisé pour calculer :
 
 La grille est gérée par un conteneur parent, qui contient toutes les images, avec des marges automatiques et des calculs pour répartir les images sur chaque ligne.
 
-### 3. A venir prochainement : Réajustement lors du redimensionnement de la fenêtre
+### 3. Réajustement lors du redimensionnement de la fenêtre
 
 Lorsque la taille de la fenêtre change (par exemple, si l'utilisateur redimensionne son navigateur), le JavaScript recalcule les tailles des images et leur positionnement pour remplir à nouveau la grille de manière optimale.
 
@@ -38,7 +38,7 @@ Lorsque la taille de la fenêtre change (par exemple, si l'utilisateur redimensi
 - **Grille fluide et adaptative :** Le nombre d'images par ligne varie en fonction de la taille de la fenêtre, sans espaces vides.
 - **Ajustement dynamique des tailles :** Les images sont redimensionnées en fonction de l'espace disponible.
 - **Respect du ratio des images :** Les images sont redimensionnées tout en gardant leur ratio original, sans déformation.
-- **A venir prochainement Recalculation à chaque redimensionnement :** La grille est automatiquement réajustée lors du redimensionnement de la fenêtre.
+- **Recalculation à chaque redimensionnement :** La grille est automatiquement réajustée lors du redimensionnement de la fenêtre.
 
 ## Installation
 

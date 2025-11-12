@@ -28,7 +28,7 @@
       ?>
   
       const config = new GridConfig({
-        baseHeight: 200,
+        baseHeight: 230,
         gap: 10,
         containerSelector: ".container",
       });
