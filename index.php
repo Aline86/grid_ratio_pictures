@@ -9,8 +9,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="left"></div>
-      <div class="right"></div>
+     
     </div>
     <script>
       <?php 
@@ -29,7 +28,7 @@
   
       const config = new GridConfig({
         baseHeight: 230,
-        gap: 10,
+        gap: 0,
         containerSelector: ".container",
       });
       const grid = new Grid('<?php echo json_encode($images); ?>', config);

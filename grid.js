@@ -43,8 +43,7 @@ class Grid {
       }
 
       this.resizeCleanup = this.eventManager.recalculate_on_resize(
-        this.initialize,
-        this.dom.reinit,
+        this.calculate_grid,
         this.config
       );
 
@@ -58,36 +57,32 @@ class Grid {
   pre_loading_pictures = () => {
     const images_data = JSON.parse(this.fichiers);
     let image_counter = 0;
-    let line = this.dom.create_line("line");
 
+    const container = this.dom.getContainer(this.config.containerSelector);
     while (image_counter < images_data.length) {
-      this.dom.appendLineToContainer(line, this.config.containerSelector);
-      let img_lines = this.dom.get_first_line(0);
       let img = this.dom.create_image(images_data, this.config, image_counter);
-      this.dom.appendChildToLine(img_lines, img);
+      this.dom.appendChildToLine(container, img);
       image_counter++;
     }
   };
 
-  calculate_grid = (images) => {
+  calculate_grid = () => {
+    const images = this.dom.getAllPictures();
+
     const container = this.dom.getContainer(this.config.containerSelector);
     const container_width = container.clientWidth;
     const container_base_height = this.config.baseHeight;
+
     const surface_line = container_width * container_base_height;
     const gap = this.config.gap;
     let width_under = 0;
 
-    let line = this.dom.create_line("line_2");
-    this.dom.appendLineToContainer(line, this.config.containerSelector);
+    let line = [];
 
     images.forEach((element) => {
       const rem = element.cloneNode();
 
-      if (width_under + parseFloat(element.clientWidth, 2) >= container_width) {
-        if (line.children.length === 1) {
-          width_under -= gap * 0.5;
-        }
-
+      if (width_under + element.clientWidth >= container_width) {
         const new_height = this.calculate_grid_part.calculate_rest(
           width_under,
           surface_line,
@@ -99,27 +94,23 @@ class Grid {
           new_height
         );
 
-        line = this.dom.create_line("line_2");
-        this.dom.appendLineToContainer(line, this.config.containerSelector);
-        this.dom.appendChildToLine(line, rem);
+        this.dom.appendChildToLine(container, rem);
+        line = [];
         width_under = 0;
       } else {
-        this.dom.appendChildToLine(line, rem);
+        this.dom.appendChildToLine(container, rem);
       }
-
-      width_under += parseInt(parseFloat(element.clientWidth) + gap);
+      line.push(rem);
+      width_under += element.clientWidth + gap;
       element.remove();
     });
-
-    this.dom.rename_last_line(this.config, line);
-    this.dom.remove_first_container(this.dom.get_first_line(0));
   };
 
   destroy = () => {
     if (this.resizeCleanup) {
       this.resizeCleanup();
     }
-    this.dom.reinit(this.config);
+
     this.dom = null;
     this.calculate_grid_part = null;
     this.imageLoader = null;
@@ -130,15 +121,18 @@ class Grid {
 class EventManager {
   constructor() {}
 
-  recalculate_on_resize = (_func, _reinit, config) => {
+  recalculate_on_resize = (_func, config) => {
     let resizeTimer;
-
+    console.log("toto");
     const handleResize = () => {
       clearTimeout(resizeTimer);
+
+      document.querySelectorAll("img").forEach((element) => {
+        element.style.setProperty("height", `${230}px`, "important");
+      });
       resizeTimer = setTimeout(() => {
-        _reinit(config);
-        _func();
-      }, 200);
+        _func(config);
+      }, 800);
     };
 
     window.addEventListener("resize", handleResize);
@@ -175,8 +169,6 @@ class GridRenderParts {
     const container = this.document.querySelector(options.containerSelector);
     if (container) {
       container.style.gap = `${options.gap}px`;
-      container.style.display = `flex`;
-      container.style.flexDirection = `column`;
     }
   };
 
@@ -186,22 +178,6 @@ class GridRenderParts {
     img.style.height = `${config.baseHeight}px`;
     img.style.objectFit = "contain";
     return img;
-  };
-
-  rename_last_line = (config, last_line) => {
-    if (!last_line) return;
-
-    if (last_line.getBoundingClientRect().width > 732) {
-      last_line.className = "line";
-      last_line.style.gap = config.gap + "px";
-      last_line.style.marginLeft = config.gap * 0.5 + "px";
-    } else {
-      const img = last_line.querySelector("img");
-      if (img) {
-        img.style.width = "calc(100% - " + config.gap + "px)";
-        img.style.height = "auto";
-      }
-    }
   };
 
   remove_first_container = (line) => {
@@ -240,18 +216,6 @@ class GridRenderParts {
   getContainer = (containerSelector) => {
     return this.document.querySelector(containerSelector);
   };
-
-  reinit = (config) => {
-    const container = this.document.querySelector(config.containerSelector);
-    if (container) {
-      const images = container.querySelectorAll("img");
-      images.forEach((img) => {
-        img.onload = null;
-        img.onerror = null;
-      });
-      container.innerHTML = "";
-    }
-  };
 }
 
 class GridCalculateParts {
@@ -266,8 +230,8 @@ class GridCalculateParts {
   adjust_children_height(current_line, element, new_height) {
     if (!current_line || !element) return;
 
-    for (let index = 0; index < current_line.children.length; index++) {
-      const child = current_line.children[index];
+    for (let index = 0; index < current_line.length; index++) {
+      const child = current_line[index];
       const newHeight = element.getBoundingClientRect().height + new_height;
       child.style.setProperty("height", `${newHeight}px`, "important");
     }
