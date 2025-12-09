@@ -9,9 +9,10 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
+
 .container::after {
   content: "";
-  flex: auto; /* pousse la dernière ligne à gauche */
+  flex: auto;
 }
 .left {
   width: 50%;

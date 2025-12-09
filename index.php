@@ -28,7 +28,7 @@
   
       const config = new GridConfig({
         baseHeight: 230,
-        gap: 0,
+        gap: 10,
         containerSelector: ".container",
       });
       const grid = new Grid('<?php echo json_encode($images); ?>', config);

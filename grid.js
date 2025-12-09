@@ -83,6 +83,9 @@ class Grid {
       const rem = element.cloneNode();
 
       if (width_under + element.clientWidth >= container_width) {
+        if (line.length === 1) {
+          width_under -= gap;
+        }
         const new_height = this.calculate_grid_part.calculate_rest(
           width_under,
           surface_line,
