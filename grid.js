@@ -55,7 +55,7 @@ class Grid {
   };
 
   pre_loading_pictures = () => {
-    const images_data = JSON.parse(this.fichiers);
+    const images_data = this.fichiers;
     let image_counter = 0;
 
     const container = this.dom.getContainer(this.config.containerSelector);
@@ -177,7 +177,7 @@ class GridRenderParts {
 
   create_image = (images_data, config, image_counter) => {
     let img = this.document.createElement("img");
-    img.src = "images/" + images_data[image_counter];
+    img.src = images_data[image_counter];
     img.style.height = `${config.baseHeight}px`;
     img.style.objectFit = "contain";
     return img;

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="grid.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="container"></div>
+    <script>
+      const images = [
+        "./images/andy-holmes-BIdxEi7cWLM-unsplash.jpg",
+        "./images/bandeau.jpg",
+        "./images/card_1.jpg",
+        "./images/card_2.jpg",
+        "./images/card_3.jpg",
+        "./images/card_4.jpg",
+        "./images/card_5.png",
+        "./images/daniel-malikyar-F1leFzugQfM-unsplash.jpg",
+        "./images/daniel-roe-lpjb_UMOyx8-unsplash.jpg",
+        "./images/desert-7461952_1920.jpg",
+        "./images/extraterrestrial-8341423_1920.png",
+        "./images/extraterrestrial-8341424_1920.png",
+        "./images/frefef.png",
+        "./images/galaxy-3696058_1920.jpg",
+        "./images/henry-be-IicyiaPYGGI-unsplash.jpg",
+        "./images/johannes-andersson-UCd78vfC8vU-unsplash.jpg",
+        "./images/juskteez-vu-TIrXot28Znc-unsplash.jpg",
+        "./images/leah-wilson-IJJxBcTHldg-unsplash.jpg",
+        "./images/logo.png",
+        "./images/logo2.png",
+        "./images/luke-richardson-ONPD_ZgSedE-unsplash.jpg",
+        "./images/mountains-8614017_1920.jpg",
+        "./images/mourad-saadi-GyDktTa0Nmw-unsplash.jpg",
+        "./images/nasa-OVO8nK-7Rfs-unsplash.jpg",
+        "./images/nasa-rTZW4f02zY8-unsplash.jpg",
+        "./images/nate-rayfield-_WR6tUIAJe8-unsplash.jpg",
+        "./images/nature-1207955_1920.jpg",
+        "./images/pexels-alexandre-saraiva-carniato-583650-2103783.jpg",
+        "./images/pexels-brett-sayles-992734.jpg",
+        "./images/pexels-catiamatos-1072179.jpg",
+        "./images/pexels-diego-madrigal-162471-696996.jpg",
+        "./images/pexels-evgenia-kirpichnikova-1007758-1973293.jpg",
+        "./images/pexels-evgenia-kirpichnikova-1007758-1973293.webp",
+        "./images/pexels-evgenia-kirpichnikova-noir-blanc-1007758-1973293.jpg",
+        "./images/pexels-gochrisgoxyz-1477166.jpg",
+        "./images/pexels-inspiredimages-132474.jpg",
+        "./images/pexels-jplenio-1632790.jpg",
+        "./images/pexels-julieaagaard-1374064.jpg",
+        "./images/pexels-m-venter-792254-1659438.jpg",
+        "./images/pexels-pixabay-36478.jpg",
+        "./images/pexels-pixabay-46216.jpg",
+        "./images/pexels-pixabay-53435.jpg",
+        "./images/pexels-pixabay-67857.jpg",
+        "./images/pexels-pixabay-158063.jpg",
+        "./images/pexels-pixabay-206359.jpg",
+        "./images/pexels-pixabay-416676.jpg",
+        "./images/pexels-pixabay-460775.jpg",
+        "./images/pexels-pixabay-462162.jpg",
+        "./images/pexels-pripicart-675764.jpg",
+        "./images/pexels-ryank-20042214.jpg",
+        "./images/pexels-suketdedhia-671658.jpg",
+        "./images/pexels-sunil-patel-191908-599708.jpg",
+        "./images/pexels-umkreisel-app-1080401.jpg",
+        "./images/pexels-unchalee-srirugsar-14114-70330.jpg",
+        "./images/pexels-zetong-li-880728-1784577.jpg",
+        "./images/samsommer-vddccTqwal8-unsplash.jpg",
+        "./images/simon-berger-twukN12EN7c-unsplash.jpg",
+        "./images/tetr.png",
+        "./images/tgrr.png",
+        "./images/tree-835455_1280.jpg",
+        "./images/urban-8807676_1920.png",
+        "./images/urban-vintage-78A265wPiO4-unsplash.jpg",
+        "./images/v2osk-1Z2niiBPg5A-unsplash.jpg",
+      ];
+      const config = new GridConfig({
+        baseHeight: 230,
+        gap: 10,
+        containerSelector: ".container",
+      });
+      const grid = new Grid(images, config);
+    </script>
+  </body>
+</html>
