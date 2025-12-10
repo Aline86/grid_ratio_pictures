@@ -73,12 +73,7 @@ img {
     flex: auto;
   }
 }
-@media screen and (max-width: 380px) {
-  .container img:last-of-type {
-    width: 100%;
-    height: 100% !important;
-  }
-}
+
 /*
  Loader
  */
