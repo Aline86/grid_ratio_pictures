@@ -55,7 +55,7 @@ img {
   flex: auto;
 }
 @media screen and (max-width: 400px) {
-  .container::after img {
+  .container:last-child {
     width: 100%;
   }
 }
