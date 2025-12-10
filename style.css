@@ -50,7 +50,7 @@ img {
   background-color: white;
   z-index: 9999;
 }
-@media screen and (max-width: 780px) {
+@media screen and (min-width: 780px) {
   .container::after {
     content: "";
     flex: auto;
