@@ -39,7 +39,7 @@ img {
 }
 
 .loader {
-  position: absolute;
+  position: fixed;
   width: fit-content;
   width: calc(80% - 15px);
   height: 100vh;
