@@ -77,10 +77,6 @@ img {
   .loader::after {
     top: calc(50% - 25px);
   }
-  .container img:last-child {
-    width: 100% !important;
-    height: 100% !important;
-  }
 }
 
 @keyframes spin {
