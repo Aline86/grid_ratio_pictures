@@ -10,10 +10,6 @@
   justify-content: space-evenly;
 }
 
-.container::after {
-  content: "";
-  flex: auto;
-}
 .left {
   width: 50%;
   height: 100%;
@@ -53,4 +49,10 @@ img {
   padding: 20px;
   background-color: white;
   z-index: 9999;
+}
+@media screen and (max-width: 780px) {
+  .container::after {
+    content: "";
+    flex: auto;
+  }
 }
