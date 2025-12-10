@@ -75,7 +75,7 @@ img {
 }
 @media screen and (max-width: 700px) {
   .loader::after {
-    top: calc(50% - 50px);
+    top: calc(50% - 25px);
   }
   .last_image_full_width img:last-of-type {
     width: 100%;
