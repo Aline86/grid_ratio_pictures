@@ -61,7 +61,7 @@ img {
   animation: spin 3s linear infinite;
 }
 
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 800px) {
   .loader::after {
     top: 50%;
     left: 50%;
@@ -73,7 +73,7 @@ img {
     flex: auto;
   }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
   .loader::after {
     top: calc(50% - 25px);
   }
