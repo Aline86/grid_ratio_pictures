@@ -73,7 +73,7 @@ img {
     flex: auto;
   }
 }
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 600px) {
   .loader::after {
     top: 40%;
   }
