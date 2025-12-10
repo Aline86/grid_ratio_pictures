@@ -50,10 +50,13 @@ img {
   background-color: white;
   z-index: 9999;
 }
-.container::after {
-  content: "";
-  flex: auto;
+@media screen and (min-width: 400px) {
+  .container::after {
+    content: "";
+    flex: auto;
+  }
 }
+
 @media screen and (max-width: 400px) {
   .container:last-child {
     width: 100%;
