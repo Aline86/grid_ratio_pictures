@@ -23,12 +23,6 @@
   flex-wrap: wrap;
 }
 
-.line_2 {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
 img {
   transition: all 0.9s ease;
   object-fit: contain;
@@ -50,15 +44,15 @@ img {
   background-color: white;
   z-index: 9999;
 }
-@media screen and (min-width: 400px) {
+@media screen and (min-width: 600px) {
   .container::after {
     content: "";
     flex: auto;
   }
 }
-
-@media screen and (max-width: 400px) {
-  .container:last-child {
+@media screen and (max-width: 600px) {
+  .container img:last-of-type {
     width: 100%;
+    height: 100% !important;
   }
 }
