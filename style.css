@@ -77,7 +77,7 @@ img {
   .loader::after {
     top: calc(50% - 25px);
   }
-  .container:last-child {
+  .container:nth-last-child {
     width: 100% !important;
     height: 100% !important;
   }
