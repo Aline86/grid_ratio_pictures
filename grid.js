@@ -78,11 +78,12 @@ class Grid {
     let width_under = 0;
 
     let line = [];
-
+    let i = 0;
     images.forEach((element) => {
       const rem = element.cloneNode();
 
       if (width_under + element.clientWidth >= container_width) {
+        i++;
         if (line.length === 1) {
           width_under -= gap;
         }
@@ -102,11 +103,15 @@ class Grid {
         width_under = 0;
       } else {
         this.dom.appendChildToLine(container, rem);
+        i++;
       }
       line.push(rem);
       width_under += element.clientWidth + gap;
       element.remove();
     });
+    if (i === images.length) {
+      this.dom.set_css_on_last_image(this.config);
+    }
   };
 
   destroy = () => {
@@ -163,7 +168,6 @@ class GridRenderParts {
   create_loader = (config) => {
     const loader = this.document.createElement("div");
     loader.className = "loader";
-    // loader.innerHTML = `Chargement...`;
     this.getContainer(config.containerSelector).appendChild(loader);
     return loader;
   };
@@ -178,7 +182,12 @@ class GridRenderParts {
       container.style.gap = `${options.gap}px`;
     }
   };
-
+  set_css_on_last_image = (options) => {
+    const container = this.document.querySelector(options.containerSelector);
+    if (container) {
+      container.classList.add("last_image_full_width");
+    }
+  };
   create_image = (images_data, config, image_counter) => {
     let img = this.document.createElement("img");
     img.src = images_data[image_counter];
