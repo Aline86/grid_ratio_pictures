@@ -131,7 +131,11 @@ class EventManager {
       clearTimeout(resizeTimer);
 
       document.querySelectorAll("img").forEach((element) => {
-        element.style.setProperty("height", `${230}px`, "important");
+        element.style.setProperty(
+          "height",
+          `${config.baseHeight}px`,
+          "important"
+        );
       });
       resizeTimer = setTimeout(() => {
         _func(config);
