@@ -50,9 +50,12 @@ img {
   background-color: white;
   z-index: 9999;
 }
-@media screen and (min-width: 780px) {
-  .container::after {
-    content: "";
-    flex: auto;
+.container::after {
+  content: "";
+  flex: auto;
+}
+@media screen and (max-width: 400px) {
+  .container::after img {
+    width: 100%;
   }
 }
