@@ -107,8 +107,6 @@ class Grid {
       width_under += element.clientWidth + gap;
       element.remove();
     });
-
-    this.dom.set_css_on_last_image(this.config);
   };
 
   destroy = () => {
