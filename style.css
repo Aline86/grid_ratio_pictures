@@ -64,8 +64,8 @@ img {
 @media screen and (min-width: 401px) {
   .loader::after {
     top: 50%;
-    left: calc(50% - 25px);
-    transform: translate(calc(-50% - 25px), calc(-50% - 25px));
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .container::after {
