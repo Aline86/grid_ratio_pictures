@@ -83,7 +83,6 @@ class Grid {
       const rem = element.cloneNode();
 
       if (width_under + element.clientWidth >= container_width) {
-        i++;
         if (line.length === 1) {
           width_under -= gap;
         }
@@ -101,6 +100,7 @@ class Grid {
         this.dom.appendChildToLine(container, rem);
         line = [];
         width_under = 0;
+        i++;
       } else {
         this.dom.appendChildToLine(container, rem);
         i++;
