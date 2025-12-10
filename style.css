@@ -71,8 +71,6 @@ img {
   left: 50%;
   transform: translate(-50%, -50%);
   border: 5px solid black;
-  border-radius: 50%;
-
   border-image: linear-gradient(
       90deg,
       rgba(255, 0, 0, 0.5),
