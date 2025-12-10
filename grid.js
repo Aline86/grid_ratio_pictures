@@ -78,7 +78,7 @@ class Grid {
     let width_under = 0;
 
     let line = [];
-    let i = 0;
+
     images.forEach((element) => {
       const rem = element.cloneNode();
 
@@ -100,18 +100,15 @@ class Grid {
         this.dom.appendChildToLine(container, rem);
         line = [];
         width_under = 0;
-        i++;
       } else {
         this.dom.appendChildToLine(container, rem);
-        i++;
       }
       line.push(rem);
       width_under += element.clientWidth + gap;
       element.remove();
     });
-    if (i >= images.length) {
-      this.dom.set_css_on_last_image(this.config);
-    }
+
+    this.dom.set_css_on_last_image(this.config);
   };
 
   destroy = () => {
