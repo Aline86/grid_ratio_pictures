@@ -131,11 +131,7 @@ class EventManager {
       clearTimeout(resizeTimer);
 
       document.querySelectorAll("img").forEach((element) => {
-        element.style.setProperty(
-          "height",
-          `${config.baseHeight}px`,
-          "important"
-        );
+        element.style.setProperty("height", `${config.baseHeight}px`);
       });
       resizeTimer = setTimeout(() => {
         _func(config);
@@ -244,7 +240,7 @@ class GridCalculateParts {
     for (let index = 0; index < current_line.length; index++) {
       const child = current_line[index];
       const newHeight = element.getBoundingClientRect().height + new_height;
-      child.style.setProperty("height", `${newHeight}px`, "important");
+      child.style.setProperty("height", `${newHeight}px`);
     }
   }
 }
