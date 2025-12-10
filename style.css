@@ -44,6 +44,7 @@ img {
   background-color: white;
   z-index: 9999;
 }
+
 @media screen and (min-width: 600px) {
   .container::after {
     content: "";
@@ -54,5 +55,38 @@ img {
   .container img:last-of-type {
     width: 100%;
     height: 100% !important;
+  }
+}
+/*
+ Loader
+ */
+
+.loader::after {
+  transition: all;
+  content: "";
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 5px solid black;
+  border-radius: 50%;
+
+  border-image: linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 0.5),
+      rgba(0, 0, 255, 0.5)
+    )
+    1;
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

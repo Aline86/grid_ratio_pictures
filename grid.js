@@ -163,7 +163,7 @@ class GridRenderParts {
   create_loader = (config) => {
     const loader = this.document.createElement("div");
     loader.className = "loader";
-    loader.innerHTML = `Chargement...`;
+    // loader.innerHTML = `Chargement...`;
     this.getContainer(config.containerSelector).appendChild(loader);
     return loader;
   };
