@@ -41,11 +41,21 @@ class Grid {
       if (this.resizeCleanup) {
         this.resizeCleanup();
       }
+      const ua = navigator.userAgent;
 
-      this.resizeCleanup = this.eventManager.recalculate_on_resize(
-        this.calculate_grid,
-        this.config
-      );
+      if (/mobile/i.test(ua) || /tablet|ipad|playbook|silk/i.test(ua)) {
+        this.resizeCleanup = this.eventManager.recalculate_on_resize(
+          this.calculate_grid,
+          this.config,
+          "change"
+        );
+      } else {
+        this.resizeCleanup = this.eventManager.recalculate_on_resize(
+          this.calculate_grid,
+          this.config,
+          "resize"
+        );
+      }
 
       if (!this.hasTriggered_loader) {
         this.dom.remove_loader();
@@ -124,9 +134,8 @@ class Grid {
 class EventManager {
   constructor() {}
 
-  recalculate_on_resize = (_func, config) => {
+  recalculate_on_resize = (_func, config, event) => {
     let resizeTimer;
-    console.log("toto");
     const handleResize = () => {
       clearTimeout(resizeTimer);
 
@@ -137,12 +146,16 @@ class EventManager {
         _func(config);
       }, 800);
     };
-
-    window.addEventListener("resize", handleResize);
+    if (event === "resize") {
+      window.addEventListener(event, handleResize);
+    } else {
+      const mq = window.matchMedia("(orientation: portrait)");
+      mq.addEventListener(event, handleResize);
+    }
 
     return () => {
       clearTimeout(resizeTimer);
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener(event, handleResize);
     };
   };
 }
