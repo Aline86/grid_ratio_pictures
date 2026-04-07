@@ -75,7 +75,7 @@ class Grid {
       image_counter++;
     }
   };
-
+  // main function
   calculate_grid = () => {
     const images = this.dom.getAllPictures();
 
