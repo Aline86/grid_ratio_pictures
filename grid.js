@@ -30,7 +30,7 @@ class Grid {
     this.pre_loading_pictures();
 
     const is_loaded = this.imageLoader.waitForAllImages(
-      this.dom.getAllPictures()
+      this.dom.getAllPictures(),
     );
 
     is_loaded.then(() => {
@@ -47,13 +47,13 @@ class Grid {
         this.resizeCleanup = this.eventManager.recalculate_on_resize(
           this.calculate_grid,
           this.config,
-          "change"
+          "change",
         );
       } else {
         this.resizeCleanup = this.eventManager.recalculate_on_resize(
           this.calculate_grid,
           this.config,
-          "resize"
+          "resize",
         );
       }
 
@@ -99,12 +99,12 @@ class Grid {
         const new_height = this.calculate_grid_part.calculate_rest(
           width_under,
           surface_line,
-          container_base_height
+          container_base_height,
         );
         this.calculate_grid_part.adjust_children_height(
           line,
           element,
-          new_height
+          new_height,
         );
 
         this.dom.appendChildToLine(container, rem);
@@ -136,6 +136,7 @@ class EventManager {
 
   recalculate_on_resize = (_func, config, event) => {
     let resizeTimer;
+    const mq = window.matchMedia("(orientation: portrait)");
     const handleResize = () => {
       clearTimeout(resizeTimer);
 
@@ -149,13 +150,16 @@ class EventManager {
     if (event === "resize") {
       window.addEventListener(event, handleResize);
     } else {
-      const mq = window.matchMedia("(orientation: portrait)");
       mq.addEventListener(event, handleResize);
     }
 
     return () => {
       clearTimeout(resizeTimer);
-      window.removeEventListener(event, handleResize);
+      if (event === "resize") {
+        window.removeEventListener("resize", handleResize);
+      } else {
+        mq.removeEventListener("change", handleResize);
+      }
     };
   };
 }
@@ -164,10 +168,6 @@ class GridRenderParts {
   constructor() {
     this.document = document;
   }
-
-  set_display_none = (line) => {
-    line.style.opacity = "0";
-  };
 
   create_loader = (config) => {
     const loader = this.document.createElement("div");
@@ -200,33 +200,10 @@ class GridRenderParts {
     return img;
   };
 
-  remove_first_container = (line) => {
-    if (line) {
-      line.remove();
-    }
-  };
-
-  appendLineToContainer = (line, selector) => {
-    const container = this.document.querySelector(selector);
-    if (container) {
-      container.appendChild(line);
-    }
-  };
-
   appendChildToLine = (line, rem) => {
     if (line && rem) {
       line.appendChild(rem);
     }
-  };
-
-  create_line = (className) => {
-    const line = this.document.createElement("div");
-    line.classList.add(className);
-    return line;
-  };
-
-  get_first_line = (i) => {
-    return this.document.querySelectorAll(".line")[i];
   };
 
   getAllPictures = () => {
