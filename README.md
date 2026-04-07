@@ -4,8 +4,6 @@ Ce projet propose une solution pour créer une grille dynamique d'images en util
 
 L'approche est entièrement personnalisée et repose sur des calculs JavaScript pour positionner et redimensionner les vignettes afin d'assurer une disposition fluide et esthétique.
 
-Le code est modulaire pour permettre l'extensibilité, le tests -- Les éléments du dom sont dissociés de la logique métier.
-
 ![Description de l'image](grid.png)
 
 ## Principe de fonctionnement
@@ -27,7 +25,7 @@ Le JavaScript est utilisé pour calculer :
 
 ### 2. Utilisation d'un conteneur flexible
 
-La grille est gérée par un conteneur parent, qui contient toutes les images, avec des marges automatiques et des calculs pour répartir les images sur chaque ligne.
+La grille est gérée par un conteneur parent, qui contient toutes les images, avec des marges automatiques et des calculs pour répartir les images sur chaque ligne en gardant leur ratio original pour ne pas les déformer.
 
 ### 3. Réajustement lors du redimensionnement de la fenêtre
 
