@@ -75,47 +75,38 @@ class Grid {
       image_counter++;
     }
   };
-  // main function
+
   calculate_grid = () => {
     const images = this.dom.getAllPictures();
 
     const container = this.dom.getContainer(this.config.containerSelector);
     const container_width = container.clientWidth;
-    const container_base_height = this.config.baseHeight;
-
-    const surface_line = container_width * container_base_height;
-    const gap = this.config.gap;
+    const container_base_height = parseInt(this.config.baseHeight);
+    const gap = parseInt(this.config.gap);
     let width_under = 0;
-
+    let ratio = 0;
     let line = [];
 
     images.forEach((element) => {
-      const rem = element.cloneNode();
+      line.push(element);
+      ratio += parseInt(element.naturalWidth) / parseInt(element.naturalHeight);
+      width_under +=
+        (parseInt(element.naturalWidth) / parseInt(element.naturalHeight)) *
+          container_base_height +
+        gap;
+      if (line.length > 0 && width_under >= container_width) {
+        const new_height = (container_width - line.length * gap) / ratio;
 
-      if (width_under + element.clientWidth >= container_width) {
-        if (line.length === 1) {
-          width_under -= gap;
-        }
-        const new_height = this.calculate_grid_part.calculate_rest(
-          width_under,
-          surface_line,
-          container_base_height,
-        );
         this.calculate_grid_part.adjust_children_height(
           line,
-          element,
+
           new_height,
         );
 
-        this.dom.appendChildToLine(container, rem);
         line = [];
         width_under = 0;
-      } else {
-        this.dom.appendChildToLine(container, rem);
+        ratio = 0;
       }
-      line.push(rem);
-      width_under += element.clientWidth + gap;
-      element.remove();
     });
   };
 
@@ -138,14 +129,7 @@ class EventManager {
     let resizeTimer;
     const mq = window.matchMedia("(orientation: portrait)");
     const handleResize = () => {
-      clearTimeout(resizeTimer);
-
-      document.querySelectorAll("img").forEach((element) => {
-        element.style.setProperty("height", `${config.baseHeight}px`);
-      });
-      resizeTimer = setTimeout(() => {
-        _func(config);
-      }, 800);
+      _func(config);
     };
     if (event === "resize") {
       window.addEventListener(event, handleResize);
@@ -154,7 +138,6 @@ class EventManager {
     }
 
     return () => {
-      clearTimeout(resizeTimer);
       if (event === "resize") {
         window.removeEventListener("resize", handleResize);
       } else {
@@ -224,13 +207,13 @@ class GridCalculateParts {
     return height;
   }
 
-  adjust_children_height(current_line, element, new_height) {
-    if (!current_line || !element) return;
+  adjust_children_height(current_line, new_height) {
+    if (!current_line) return;
 
     for (let index = 0; index < current_line.length; index++) {
       const child = current_line[index];
-      const newHeight = element.getBoundingClientRect().height + new_height;
-      child.style.setProperty("height", `${newHeight}px`);
+
+      child.style.setProperty("height", `${new_height}px`);
     }
   }
 }

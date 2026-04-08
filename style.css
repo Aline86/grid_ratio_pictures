@@ -7,7 +7,6 @@
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
 }
 
 .left {
@@ -17,10 +16,6 @@
 .right {
   width: 50%;
   height: 100%;
-}
-.line {
-  display: flex;
-  flex-wrap: wrap;
 }
 
 img {
