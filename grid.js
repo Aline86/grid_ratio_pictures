@@ -1,8 +1,8 @@
 class GridConfig {
   constructor(options = {}) {
-    this.baseHeight = options.baseHeight || 200;
-    this.gap = options.gap || 10;
-    this.containerSelector = options.containerSelector || ".container";
+    this.baseHeight = options.baseHeight ?? 200;
+    this.gap = options.gap ?? 10;
+    this.containerSelector = options.containerSelector ?? ".container";
   }
 }
 
@@ -126,7 +126,6 @@ class EventManager {
   constructor() {}
 
   recalculate_on_resize = (_func, config, event) => {
-    let resizeTimer;
     const mq = window.matchMedia("(orientation: portrait)");
     const handleResize = () => {
       _func(config);
